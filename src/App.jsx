@@ -14,7 +14,7 @@ import {
   ChevronDown,
   Settings,
   LogOut,
-  Bell
+  Bell,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -39,6 +39,8 @@ export default function MusicApp() {
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const searchInputRef = useRef(null);
 
+  const BASE_URL = import.meta.env.VITE_API_URL;
+
   const notifications = [
     {
       avatar: "/placeholder.svg?height=32&width=32",
@@ -61,7 +63,7 @@ export default function MusicApp() {
       target: "Booping at Adobe",
       time: "15m",
     },
-  ]
+  ];
 
   const toggleSearch = () => {
     setIsSearchExpanded(!isSearchExpanded);
@@ -79,8 +81,10 @@ export default function MusicApp() {
     const fetchData = async () => {
       try {
         const [trackRes, albumRes] = await Promise.all([
-          axios("api/api/v1/json/2/track.php?m=2115888"),
-          axios("api/api/v1/json/2/album.php?i=112024"),
+          // axios("api/api/v1/json/2/track.php?m=2115888"),
+          // axios("api/api/v1/json/2/album.php?i=112024"),
+          axios(`${BASE_URL}/track.php?m=2115888`),
+          axios(`${BASE_URL}/album.php?i=112024`),
         ]);
         setTrackLists(trackRes.data.track);
         setAlbums(albumRes.data.album);
