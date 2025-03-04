@@ -79,8 +79,8 @@ export default function MusicApp() {
     const fetchData = async () => {
       try {
         const [trackRes, albumRes] = await Promise.all([
-          axios("https://theaudiodb.com/api/v1/json/2/track.php?m=2115888"),
-          axios("https://theaudiodb.com/api/v1/json/2/album.php?i=112024"),
+          axios("api/api/v1/json/2/track.php?m=2115888"),
+          axios("api/api/v1/json/2/album.php?i=112024"),
         ]);
         setTrackLists(trackRes.data.track);
         setAlbums(albumRes.data.album);
