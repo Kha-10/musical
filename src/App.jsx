@@ -39,7 +39,10 @@ export default function MusicApp() {
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const searchInputRef = useRef(null);
 
-  const BASE_URL = import.meta.env.VITE_API_URL;
+  const apiUrl = 'https://theaudiodb.com/api/v1/json/2/track.php?m=2115888';
+  const apiUrlT = 'https://theaudiodb.com/api/v1/json/2/album.php?i=112024'
+  const proxyUrl = `${process.env.PROXY_BASE_URL || '/api'}/proxy?url=${encodeURIComponent(apiUrl)}`;
+  const proxyUrlT = `${process.env.PROXY_BASE_URL || '/api'}/proxy?url=${encodeURIComponent(apiUrlT)}`;
 
   const notifications = [
     {
@@ -83,8 +86,8 @@ export default function MusicApp() {
         const [trackRes, albumRes] = await Promise.all([
           // axios("api/api/v1/json/2/track.php?m=2115888"),
           // axios("api/api/v1/json/2/album.php?i=112024"),
-          axios(`${BASE_URL}/track.php?m=2115888`),
-          axios(`${BASE_URL}/album.php?i=112024`),
+          axios(proxyUrl),
+          axios(proxyUrlT),
         ]);
         setTrackLists(trackRes.data.track);
         setAlbums(albumRes.data.album);
