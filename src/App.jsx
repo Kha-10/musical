@@ -41,8 +41,8 @@ export default function MusicApp() {
 
   const apiUrl = 'https://theaudiodb.com/api/v1/json/2/track.php?m=2115888';
   const apiUrlT = 'https://theaudiodb.com/api/v1/json/2/album.php?i=112024'
-  const proxyUrl = `${process.env.PROXY_BASE_URL || '/api'}/proxy?url=${encodeURIComponent(apiUrl)}`;
-  const proxyUrlT = `${process.env.PROXY_BASE_URL || '/api'}/proxy?url=${encodeURIComponent(apiUrlT)}`;
+  const proxyUrl = `${import.meta.env.VITE_PROXY_BASE_URL|| '/api'}/proxy?url=${encodeURIComponent(apiUrl)}`;
+  const proxyUrlT = `${import.meta.env.VITE_PROXY_BASE_URL|| '/api'}/proxy?url=${encodeURIComponent(apiUrlT)}`;
 
   const notifications = [
     {
