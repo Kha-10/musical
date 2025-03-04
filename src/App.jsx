@@ -211,7 +211,7 @@ export default function MusicApp() {
           </div>
 
           {/* Your playlists section */}
-          <div className="px-4 pt-6 bg-white/80">
+          <div className="px-4 pt-6 bg-transparent">
             <div className="flex items-center justify-between mb-4">
               <div className="text-xs font-medium text-gray-500">
                 YOUR PLAYLISTS
