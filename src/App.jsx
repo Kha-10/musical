@@ -11,10 +11,23 @@ import {
   MoreHorizontal,
   Play,
   X,
+  ChevronDown,
+  Settings,
+  LogOut,
+  Bell
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import {
+  DropdownMenu,
+  DropdownMenuLabel,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 import axios from "axios";
 
@@ -23,10 +36,32 @@ export default function MusicApp() {
   const [albums, setAlbums] = useState(null);
   const [likedSongs, setLikedSongs] = useState([]);
   const [activeTab, setActiveTab] = useState("home");
-  const [searchActive, setSearchActive] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const searchInputRef = useRef(null);
+
+  const notifications = [
+    {
+      avatar: "/placeholder.svg?height=32&width=32",
+      name: "Maria",
+      action: "likes your playlist",
+      target: "XD 4 Life",
+      time: "2m",
+    },
+    {
+      avatar: "/placeholder.svg?height=32&width=32",
+      name: "Jasmine",
+      action: "is currently listening to",
+      target: "Best of Blues",
+      time: "5m",
+    },
+    {
+      avatar: "/placeholder.svg?height=32&width=32",
+      name: "Marc",
+      action: "liked your playlist",
+      target: "Booping at Adobe",
+      time: "15m",
+    },
+  ]
 
   const toggleSearch = () => {
     setIsSearchExpanded(!isSearchExpanded);
@@ -47,7 +82,6 @@ export default function MusicApp() {
           axios("api/api/v1/json/2/track.php?m=2115888"),
           axios("api/api/v1/json/2/album.php?i=112024"),
         ]);
-
         setTrackLists(trackRes.data.track);
         setAlbums(albumRes.data.album);
       } catch (error) {
@@ -65,31 +99,68 @@ export default function MusicApp() {
         {/* Sidebar */}
         <div className="w-64 bg-gray-100 h-[650px] border-r flex flex-col rounded-bl-[60px] shadow z-30">
           {/* User profile */}
-          <div className="p-4 flex items-center">
-            <Avatar className="h-10 w-10 mr-3">
-              <AvatarImage src="/placeholder-user.jpg" alt="Joshua" />
-              <AvatarFallback>JD</AvatarFallback>
-            </Avatar>
-            <div>
-              <div className="flex items-center">
-                <div className="font-medium">Joshua</div>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="ml-1"
+          <div className="p-4">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="w-full flex items-center px-0 hover:bg-white/20"
                 >
-                  <path d="m6 9 6 6 6-6" />
-                </svg>
-              </div>
-              <div className="text-xs text-gray-500">PREMIUM</div>
-            </div>
+                  <Avatar className="h-10 w-10 mr-3 ring-2 ring-white/50">
+                    <AvatarImage src="/placeholder-user.jpg" alt="Joshua" />
+                    <AvatarFallback>JD</AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1 text-left">
+                    <div className="flex items-center">
+                      <div className="font-medium">Joshua</div>
+                      <ChevronDown className="h-4 w-4 ml-1" />
+                    </div>
+                    <div className="text-xs text-gray-400">
+                      <span className="text-[10px] border px-1 border-gray-300">
+                        PREMIUM
+                      </span>
+                    </div>
+                  </div>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                className="w-56"
+                align="start"
+                sideOffset={0}
+              >
+                <div className="flex flex-col space-y-4 p-2">
+                  <div className="flex justify-between items-center">
+                    <span className="text-[10px] px-1 text-green-700 border border-green-700">
+                      PREMIUM
+                    </span>
+                    <span className="text-[10px] text-gray-300">
+                      Through 11/2
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm">Private</span>
+                    <Switch />
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm">Explicit Filter</span>
+                    <Switch />
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm">Friend Activity</span>
+                    <Switch />
+                  </div>
+                </div>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <Settings className="mr-2 h-4 w-4" />
+                  <span>Account Settings</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Log out</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
 
           {/* Browse section */}
@@ -188,7 +259,7 @@ export default function MusicApp() {
         </div>
 
         {/* Main content area */}
-        <div className="flex-1 h-[650px] overflow-auto p-6 pb-24 overflow-y-hidden rounded-br-[30px] shadow bg-white z-30">
+        <div className="flex-1 h-[650px] overflow-auto p-6 pb-24 rounded-br-[30px] shadow bg-white z-30">
           {/* Top bar with search and notifications */}
           <div className="flex justify-between items-center mb-6">
             <div className="relative flex items-center">
@@ -224,26 +295,48 @@ export default function MusicApp() {
                 />
               </div>
             </div>
-            <Button variant="ghost" size="icon" className="h-10 w-10 relative">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-                <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-              </svg>
-              <Badge className="absolute top-0 right-0 h-5 w-5 flex items-center justify-center p-0 bg-pink-500">
-                3
-              </Badge>
-              <span className="sr-only">Notifications</span>
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-10 w-10 relative bg-white/50 hover:bg-white/70 rounded-full"
+                >
+                  <Bell className="h-5 w-5" />
+                  <Badge className="absolute top-0 right-0 h-5 w-5 flex items-center justify-center p-0 bg-pink-500">
+                    3
+                  </Badge>
+                  <span className="sr-only">Notifications</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-80" align="end" sideOffset={5}>
+                <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                {notifications.map((notification, index) => (
+                  <DropdownMenuItem
+                    key={index}
+                    className="flex items-center gap-4 p-3"
+                  >
+                    <Avatar className="h-8 w-8">
+                      <AvatarImage src={notification.avatar} />
+                      <AvatarFallback>{notification.name[0]}</AvatarFallback>
+                    </Avatar>
+                    <div className="flex-1 space-y-1">
+                      <p className="text-sm leading-none">
+                        <span className="font-medium">{notification.name}</span>{" "}
+                        {notification.action}{" "}
+                        <span className="font-medium">
+                          {notification.target}
+                        </span>
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {notification.time}
+                      </p>
+                    </div>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
 
           {/* Featured content cards */}
